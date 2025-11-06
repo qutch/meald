@@ -10,7 +10,7 @@ import SwiftUI
 
 struct ProgressBar: View {
     // Progress variables
-    let totalSteps: Int = 6
+    let totalSteps: Int
     var currentStep: Int = 0
     
     var body: some View {
@@ -173,9 +173,29 @@ struct OnboardingView_StepTwo: View {
 
 struct OnboardingView_StepThree: View {
     @Binding var pageSelected: [Int:[String]]
+    @Binding var location: String
     var step = 3
     var body: some View {
-        Text("Step Three")
+        VStack {
+            
+            // Questions
+            Text("Let's set up your profile")
+                .font(.title)
+                .padding(.vertical, 20)
+            
+            Text("Where are you located?")
+                .font(.headline)
+            TextField(
+                "Enter Location",
+                text: $location
+            )
+            .frame(width: 120, height:40)
+            .padding(.horizontal, 15)
+            .background(Color(red:234/255, green:234/255, blue:234/255))
+            .clipShape(.rect(cornerRadius:10))
+            .foregroundStyle(.black)
+            .multilineTextAlignment(.center)
+        }
     }
 }
 
@@ -221,6 +241,7 @@ struct ButtonChoice: View {
     var buttonText: String
     var step: Int
     @State private var isClicked: Bool = false
+    
     @Binding var pageSelected: [Int:[String]]
     
     var body: some View {
@@ -255,12 +276,9 @@ struct MainOnboardingView: View {
     @State private var curStep: Int = 1
     @State private var pageChoices: [Int : [String]] = [:]
     @State private var onboardingFinished: Bool = false
+    @State private var location: String = ""
     
-    private func savePagePreferences() {
-//        pageChoices[curStep] = pageSelected
-//        pageSelected = []
-        print(pageChoices)
-    }
+    
     
     var body: some View {
         ZStack {
@@ -281,7 +299,7 @@ struct MainOnboardingView: View {
                     .padding(.horizontal, 30)
                     
                     Spacer()
-                    ProgressBar(currentStep: curStep)
+                    ProgressBar(totalSteps: 6, currentStep: curStep)
                     Spacer()
 
                     Spacer()
@@ -292,18 +310,17 @@ struct MainOnboardingView: View {
                 
                 // Middle Section
                 TabView(selection: $curStep) {
-                    OnboardingView_StepOne(pageSelected: $pageChoices).tag(1)
-                    OnboardingView_StepTwo(pageSelected: $pageChoices).tag(2)
-                    OnboardingView_StepThree(pageSelected: $pageChoices).tag(3)
-                    OnboardingView_StepFour(pageSelected: $pageChoices).tag(4)
-                    OnboardingView_StepFive(pageSelected: $pageChoices).tag(5)
-                    OnboardingView_StepSix(pageSelected: $pageChoices).tag(6)
+                    OnboardingView_StepOne(pageSelected: $pageChoices).tag(1).gesture(DragGesture())
+                    OnboardingView_StepTwo(pageSelected: $pageChoices).tag(2).gesture(DragGesture())
+                    OnboardingView_StepThree(pageSelected: $pageChoices, location: $location).tag(3).gesture(DragGesture())
+                    OnboardingView_StepFour(pageSelected: $pageChoices).tag(4).gesture(DragGesture())
+                    OnboardingView_StepFive(pageSelected: $pageChoices).tag(5).gesture(DragGesture())
+                    OnboardingView_StepSix(pageSelected: $pageChoices).tag(6).gesture(DragGesture())
                 }.tabViewStyle(.page(indexDisplayMode: .never))
                 
                 // Continue Button
                 Button(
                     action:{
-                        savePagePreferences()
                         if (curStep == 6) {
                             onboardingFinished = true
                         } else {
@@ -317,12 +334,9 @@ struct MainOnboardingView: View {
                         .background(Color(red:255/255, green:91/255, blue:91/255))
                         .cornerRadius(100)
                 }
-                
             }
-            
         }
     }
-    
 }
 
 #Preview {
