@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MapKit
 
 
 struct ProgressBar: View {
@@ -40,6 +41,7 @@ struct ProgressBar: View {
 struct OnboardingView_StepOne: View {
     
     @Binding var pageSelected: [Int:[String]]
+    @State private var buttonStates: [String: Bool] = [:]
     var step = 1
     
     var body: some View {
@@ -56,47 +58,152 @@ struct OnboardingView_StepOne: View {
             VStack {
                 HStack {
                     Spacer()
-                    ButtonChoice(buttonText: "Korean", step: step, pageSelected: $pageSelected)
+                    ButtonChoice(
+                        buttonText: "Korean", step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["Korean"] ?? false },
+                            set: { buttonStates["Korean"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
                     Spacer()
-                    ButtonChoice(buttonText: "Chinese", step: step, pageSelected: $pageSelected)
+                    ButtonChoice(
+                        buttonText: "Chinese", step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["Chinese"] ?? false },
+                            set: { buttonStates["Chinese"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
                     Spacer()
-                    ButtonChoice(buttonText: "Japanese", step: step, pageSelected: $pageSelected)
-                    Spacer()
-                }
-                HStack {
-                    Spacer()
-                    ButtonChoice(buttonText: "Mexican", step: step, pageSelected: $pageSelected)
-                    Spacer()
-                    ButtonChoice(buttonText: "Spanish", step: step, pageSelected: $pageSelected)
-                    Spacer()
-                    ButtonChoice(buttonText: "Nigerian", step: step, pageSelected: $pageSelected)
-                    Spacer()
-                }
-                HStack {
-                    Spacer()
-                    ButtonChoice(buttonText: "American", step: step, pageSelected: $pageSelected)
-                    Spacer()
-                    ButtonChoice(buttonText: "Italian", step: step, pageSelected: $pageSelected)
-                    Spacer()
-                    ButtonChoice(buttonText: "German", step: step, pageSelected: $pageSelected)
-                    Spacer()
-                }
-                HStack {
-                    Spacer()
-                    ButtonChoice(buttonText: "Vietnamese", step: step, pageSelected: $pageSelected)
-                    Spacer()
-                    ButtonChoice(buttonText: "Thai", step: step, pageSelected: $pageSelected)
-                    Spacer()
-                    ButtonChoice(buttonText: "French", step: step, pageSelected: $pageSelected)
+                    ButtonChoice(
+                        buttonText: "Japanese", step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["Japanese"] ?? false },
+                            set: { buttonStates["Japanese"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
                     Spacer()
                 }
                 HStack {
                     Spacer()
-                    ButtonChoice(buttonText: "Indian", step: step, pageSelected: $pageSelected)
+                    ButtonChoice(
+                        buttonText: "Mexican", step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["Mexican"] ?? false },
+                            set: { buttonStates["Mexican"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
                     Spacer()
-                    ButtonChoice(buttonText: "Ethiopian", step: step, pageSelected: $pageSelected)
+                    ButtonChoice(
+                        buttonText: "Spanish", step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["Spanish"] ?? false },
+                            set: { buttonStates["Spanish"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
                     Spacer()
-                    ButtonChoice(buttonText: "Greek", step: step, pageSelected: $pageSelected)
+                    ButtonChoice(
+                        buttonText: "Nigerian", step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["Nigerian"] ?? false },
+                            set: { buttonStates["Nigerian"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
+                    Spacer()
+                }
+                HStack {
+                    Spacer()
+                    ButtonChoice(
+                        buttonText: "American", step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["American"] ?? false },
+                            set: { buttonStates["American"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
+                    Spacer()
+                    ButtonChoice(
+                        buttonText: "Italian", step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["Italian"] ?? false },
+                            set: { buttonStates["Italian"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
+                    Spacer()
+                    ButtonChoice(
+                        buttonText: "German", step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["German"] ?? false },
+                            set: { buttonStates["German"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
+                    Spacer()
+                }
+                HStack {
+                    Spacer()
+                    ButtonChoice(
+                        buttonText: "Vietnamese", step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["Vietnamese"] ?? false },
+                            set: { buttonStates["Vietnamese"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
+                    Spacer()
+                    ButtonChoice(
+                        buttonText: "Thai", step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["Thai"] ?? false },
+                            set: { buttonStates["Thai"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
+                    Spacer()
+                    ButtonChoice(
+                        buttonText: "French", step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["French"] ?? false },
+                            set: { buttonStates["French"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
+                    Spacer()
+                }
+                HStack {
+                    Spacer()
+                    ButtonChoice(
+                        buttonText: "Indian", step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["Indian"] ?? false },
+                            set: { buttonStates["Indian"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
+                    Spacer()
+                    ButtonChoice(
+                        buttonText: "Ethiopian", step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["Ethiopian"] ?? false },
+                            set: { buttonStates["Ethiopian"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
+                    Spacer()
+                    ButtonChoice(
+                        buttonText: "Greek", step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["Greek"] ?? false },
+                            set: { buttonStates["Greek"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
                     Spacer()
                 }
             }
@@ -115,6 +222,7 @@ struct OnboardingView_StepOne: View {
 struct OnboardingView_StepTwo: View {
     
     @Binding var pageSelected: [Int:[String]]
+    @State private var buttonStates: [String: Bool] = [:]
     var step = 2
     
     var body: some View {
@@ -131,29 +239,92 @@ struct OnboardingView_StepTwo: View {
             VStack {
                 HStack {
                     Spacer()
-                    ButtonChoice(buttonText: "Fine Dining", step: step, pageSelected: $pageSelected)
+                    ButtonChoice(
+                        buttonText: "Fine Dining", step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["Fine Dining"] ?? false },
+                            set: { buttonStates["Fine Dining"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
                     Spacer()
-                    ButtonChoice(buttonText: "Food Trucks", step: step, pageSelected: $pageSelected)
+                    ButtonChoice(
+                        buttonText: "Food Trucks", step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["Food Trucks"] ?? false },
+                            set: { buttonStates["Food Trucks"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
                     Spacer()
-                    ButtonChoice(buttonText: "Fast Food", step: step, pageSelected: $pageSelected)
+                    ButtonChoice(
+                        buttonText: "Fast Food", step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["Fast Food"] ?? false },
+                            set: { buttonStates["Fast Food"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
                     Spacer()
                 }
                 HStack {
                     Spacer()
-                    ButtonChoice(buttonText: "Bars", step: step, pageSelected: $pageSelected)
+                    ButtonChoice(
+                        buttonText: "Bars", step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["Bars"] ?? false },
+                            set: { buttonStates["Bars"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
                     Spacer()
-                    ButtonChoice(buttonText: "Walk-In", step: step, pageSelected: $pageSelected)
+                    ButtonChoice(
+                        buttonText: "Walk-In", step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["Walk-In"] ?? false },
+                            set: { buttonStates["Walk-In"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
                     Spacer()
-                    ButtonChoice(buttonText: "Reservation", step: step, pageSelected: $pageSelected)
+                    ButtonChoice(
+                        buttonText: "Reservation", step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["Reservation"] ?? false },
+                            set: { buttonStates["Reservation"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
                     Spacer()
                 }
                 HStack {
                     Spacer()
-                    ButtonChoice(buttonText: "Home", step: step, pageSelected: $pageSelected)
+                    ButtonChoice(
+                        buttonText: "Home", step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["Home"] ?? false },
+                            set: { buttonStates["Home"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
                     Spacer()
-                    ButtonChoice(buttonText: "Hole in the Walls", step: step, pageSelected: $pageSelected)
+                    ButtonChoice(
+                        buttonText: "Hole in the Walls", step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["Hole in the Walls"] ?? false },
+                            set: { buttonStates["Hole in the Walls"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
                     Spacer()
-                    ButtonChoice(buttonText: "Take Out", step: step, pageSelected: $pageSelected)
+                    ButtonChoice(
+                        buttonText: "Take Out", step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["Take Out"] ?? false },
+                            set: { buttonStates["Take Out"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
                     Spacer()
                 }
             }
@@ -172,8 +343,11 @@ struct OnboardingView_StepTwo: View {
 
 
 struct OnboardingView_StepThree: View {
+ 
+    @StateObject private var searchVM = LocationSearchViewModel()
     @Binding var pageSelected: [Int:[String]]
     @Binding var location: String
+    @State private var curSearchTask: Task<Void, Never>?
     var step = 3
     var body: some View {
         VStack {
@@ -188,13 +362,27 @@ struct OnboardingView_StepThree: View {
             TextField(
                 "Enter Location",
                 text: $location
-            )
+            ).onChange(of:location) {
+                searchVM.update(query: location)
+            }
             .frame(width: 120, height:40)
             .padding(.horizontal, 15)
             .background(Color(red:234/255, green:234/255, blue:234/255))
             .clipShape(.rect(cornerRadius:10))
             .foregroundStyle(.black)
             .multilineTextAlignment(.center)
+            
+            List{
+                ForEach(searchVM.res, id: \.self) { item in
+                    Button(item) {
+                        location = item
+                    }
+                }
+            }
+            .frame(height:200)
+            .listStyle(.plain)
+            .scrollContentBackground(.hidden)
+            
         }
     }
 }
@@ -240,7 +428,7 @@ struct ButtonChoice: View {
     
     var buttonText: String
     var step: Int
-    @State private var isClicked: Bool = false
+    @Binding var isClicked: Bool
     
     @Binding var pageSelected: [Int:[String]]
     
@@ -277,6 +465,7 @@ struct MainOnboardingView: View {
     @State private var pageChoices: [Int : [String]] = [:]
     @State private var onboardingFinished: Bool = false
     @State private var location: String = ""
+    @State private var navigationBack: Bool = false
     
     
     
@@ -289,11 +478,18 @@ struct MainOnboardingView: View {
                 // Top Section
                 HStack {
                     Button(
-                        action:{if (curStep > 1){
-                            curStep -= 1
-                        }
-                    },
-                        label:{Image(systemName: "chevron.left").foregroundStyle(.black).imageScale(.large)}
+                        action:{
+                            if (curStep > 1) {
+                                withAnimation(.easeInOut(duration: 1.0)) {
+                                    curStep -= 1
+                                }
+                            } else {
+                                navigationBack = true
+                            }
+                        },
+                        label:{Image(systemName: "chevron.left")
+                            .foregroundStyle(curStep==1 ? .white : .black)
+                            .imageScale(.large)}
                     )
                     .frame(width:20, height:20)
                     .padding(.horizontal, 30)
@@ -310,13 +506,13 @@ struct MainOnboardingView: View {
                 
                 // Middle Section
                 TabView(selection: $curStep) {
-                    OnboardingView_StepOne(pageSelected: $pageChoices).tag(1).gesture(DragGesture())
-                    OnboardingView_StepTwo(pageSelected: $pageChoices).tag(2).gesture(DragGesture())
-                    OnboardingView_StepThree(pageSelected: $pageChoices, location: $location).tag(3).gesture(DragGesture())
-                    OnboardingView_StepFour(pageSelected: $pageChoices).tag(4).gesture(DragGesture())
-                    OnboardingView_StepFive(pageSelected: $pageChoices).tag(5).gesture(DragGesture())
-                    OnboardingView_StepSix(pageSelected: $pageChoices).tag(6).gesture(DragGesture())
-                }.tabViewStyle(.page(indexDisplayMode: .never))
+                    OnboardingView_StepOne(pageSelected: $pageChoices).tag(1)
+                    OnboardingView_StepTwo(pageSelected: $pageChoices).tag(2)
+                    OnboardingView_StepThree(pageSelected: $pageChoices, location: $location).tag(3)
+                    OnboardingView_StepFour(pageSelected: $pageChoices).tag(4)
+                    OnboardingView_StepFive(pageSelected: $pageChoices).tag(5)
+                    OnboardingView_StepSix(pageSelected: $pageChoices).tag(6)
+                }.tabViewStyle(.page(indexDisplayMode: .never)).highPriorityGesture(DragGesture())
                 
                 // Continue Button
                 Button(
@@ -324,7 +520,9 @@ struct MainOnboardingView: View {
                         if (curStep == 6) {
                             onboardingFinished = true
                         } else {
-                            curStep += 1
+                            withAnimation(.easeInOut(duration: 0.5)) {
+                                curStep += 1
+                            }
                         }
                     }
                 ){
@@ -335,7 +533,7 @@ struct MainOnboardingView: View {
                         .cornerRadius(100)
                 }
             }
-        }
+        } // End of ZStack
     }
 }
 
