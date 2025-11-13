@@ -332,8 +332,6 @@ struct OnboardingView_StepTwo: View {
             Spacer()
             
             
-            
-            
         }
             .frame(maxWidth:.infinity, maxHeight:.infinity)
             .padding(.vertical, 20)
@@ -344,10 +342,13 @@ struct OnboardingView_StepTwo: View {
 
 struct OnboardingView_StepThree: View {
  
-    @StateObject private var searchVM = LocationSearchViewModel()
+    @StateObject private var searchVM = LocationSearchViewModel(type:"location")
     @Binding var pageSelected: [Int:[String]]
     @Binding var location: String
     @State private var curSearchTask: Task<Void, Never>?
+    @State private var buttonStates: [String: Bool] = [:]
+    @FocusState private var locationFieldIsFocused: Bool
+
     var step = 3
     var body: some View {
         VStack {
@@ -371,40 +372,311 @@ struct OnboardingView_StepThree: View {
             .clipShape(.rect(cornerRadius:10))
             .foregroundStyle(.black)
             .multilineTextAlignment(.center)
+            .autocorrectionDisabled(true)
+            .focused($locationFieldIsFocused)
             
-            List{
-                ForEach(searchVM.res, id: \.self) { item in
-                    Button(item) {
-                        location = item
+            if locationFieldIsFocused {
+                ScrollView {
+                    VStack(alignment: .leading) {
+                        ForEach(searchVM.res, id: \.self) { item in
+                            Button(item) {
+                                location = item
+                            }
+                            .frame(height: 40)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .foregroundStyle(.black)
+                            .padding(.horizontal,20)
+                        }
                     }
-                }
+                }.frame(maxHeight: 200)
             }
-            .frame(height:200)
-            .listStyle(.plain)
-            .scrollContentBackground(.hidden)
+            Spacer().frame(height:50)
+            Text("How far will you go?").font(.headline)
+            VStack {
+                HStack {
+                    Spacer()
+                    ButtonChoice(
+                        buttonText: "5-10 min",
+                        step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["5-10 min"] ?? false },
+                            set: { buttonStates["5-10 min"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
+                    Spacer()
+                    ButtonChoice(
+                        buttonText: "10-20 min",
+                        step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["10-20 min"] ?? false },
+                            set: { buttonStates["10-20 min"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
+                    Spacer()
+                }
+                HStack {
+                    Spacer()
+                    ButtonChoice(
+                        buttonText: "20-30 min",
+                        step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["20-30 min"] ?? false },
+                            set: { buttonStates["20-30 min"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
+                    Spacer()
+                    ButtonChoice(
+                        buttonText: "30-45 min",
+                        step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["30-45 min"] ?? false },
+                            set: { buttonStates["30-45 min"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
+                    Spacer()
+                }
+                ButtonChoice(
+                    buttonText: "45+ min",
+                    step: step,
+                    isClicked: Binding(
+                        get: { buttonStates["45+ min"] ?? false },
+                        set: { buttonStates["45+ min"] = $0
+                    }),
+                    pageSelected: $pageSelected
+                )
+                
+            }
+            Spacer()
             
-        }
+            
+
+            
+        }.frame(maxHeight: .infinity)
     }
 }
 
 struct OnboardingView_StepFour: View {
     @Binding var pageSelected: [Int:[String]]
+    @State private var buttonStates: [String: Bool] = [:]
     var step = 4
     var body: some View {
-        Text("Step four")
+        VStack {
+
+            Text("Let's set up your profile")
+                .font(.title)
+                .padding(.vertical, 20)
+            
+            Text("Any allergies?").font(.headline)
+            VStack {
+                HStack {
+                    Spacer()
+                    ButtonChoice(
+                        buttonText: "Peanuts",
+                        step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["Peanuts"] ?? false },
+                            set: { buttonStates["Peanuts"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
+                    Spacer()
+                    ButtonChoice(
+                        buttonText: "Sesame",
+                        step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["Sesame"] ?? false },
+                            set: { buttonStates["Sesame"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
+                    Spacer()
+                    ButtonChoice(
+                        buttonText: "Dairy",
+                        step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["Dairy"] ?? false },
+                            set: { buttonStates["Dairy"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
+                    Spacer()
+                }
+                HStack {
+                    Spacer()
+                    ButtonChoice(
+                        buttonText: "Tree Nuts",
+                        step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["Tree Nuts"] ?? false },
+                            set: { buttonStates["Tree Nuts"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
+                    Spacer()
+                    ButtonChoice(
+                        buttonText: "Eggs",
+                        step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["Eggs"] ?? false },
+                            set: { buttonStates["Eggs"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
+                    Spacer()
+                    ButtonChoice(
+                        buttonText: "Wheat",
+                        step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["Wheat"] ?? false },
+                            set: { buttonStates["Wheat"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
+                    Spacer()
+                }
+                HStack {
+                    Spacer()
+                    ButtonChoice(
+                        buttonText: "Soy",
+                        step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["Soy"] ?? false },
+                            set: { buttonStates["Soy"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
+                    Spacer()
+                    ButtonChoice(
+                        buttonText: "Shellfish",
+                        step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["Shellfish"] ?? false },
+                            set: { buttonStates["Shellfish"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
+                    Spacer()
+                    ButtonChoice(
+                        buttonText: "Fish",
+                        step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["Fish"] ?? false },
+                            set: { buttonStates["Fish"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
+                    Spacer()
+                }
+            }
+            
+            Spacer().frame(height:100)
+            
+            Text("Any other food restrictions?").font(.headline)
+            VStack{
+                HStack{
+                    Spacer()
+                    ButtonChoice(
+                        buttonText: "Gluten Free",
+                        step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["Gluten Free"] ?? false },
+                            set: { buttonStates["Gluten Free"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
+                    Spacer()
+                    ButtonChoice(
+                        buttonText: "Vegetarian",
+                        step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["Vegetarian"] ?? false },
+                            set: { buttonStates["Vegetarian"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
+                    Spacer()
+                }
+                HStack{
+                    Spacer()
+                    ButtonChoice(
+                        buttonText: "Vegan",
+                        step: step,
+                        isClicked: Binding(
+                            get: { buttonStates["Vegan"] ?? false },
+                            set: { buttonStates["Vegan"] = $0
+                        }),
+                        pageSelected: $pageSelected
+                    )
+                    Spacer()
+                }
+            }
+            
+            Spacer()
+        }
     }
 }
 
 struct OnboardingView_StepFive: View {
+    
+    @StateObject private var searchVM = LocationSearchViewModel(type: "poi")
     @Binding var pageSelected: [Int:[String]]
+    @State private var buttonStates: [String: Bool] = [:]
+    @FocusState private var locationFieldIsFocused: Bool
+    @State var curTyped: String = ""
+    
     var step = 5
     var body: some View {
-        Text("Step five")
+        VStack {
+            // Questions
+            Text("Let's set up your profile")
+                .font(.title)
+                .padding(.vertical, 20)
+            
+            Text("Any favorite spots?")
+                .font(.headline)
+            TextField(
+                "Enter Restaurant Name",
+                text: $curTyped
+            ).onChange(of:curTyped) {
+                searchVM.update(query: curTyped)
+            }.onSubmit() {
+                print("hi")
+            }
+            .frame(width: 120, height:40)
+            .padding(.horizontal, 15)
+            .background(Color(red:234/255, green:234/255, blue:234/255))
+            .clipShape(.rect(cornerRadius:10))
+            .foregroundStyle(.black)
+            .multilineTextAlignment(.center)
+            .autocorrectionDisabled(true)
+            .focused($locationFieldIsFocused)
+            
+            if locationFieldIsFocused {
+                ScrollView {
+                    VStack(alignment: .leading) {
+                        ForEach(searchVM.res, id: \.self) { item in
+                            Button(item) {
+                                curTyped = item
+                            }
+                            .frame(height: 40)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .foregroundStyle(.black)
+                            .padding(.horizontal,20)
+                        }
+                    }
+                }.frame(maxHeight: 200)
+            }
+        }
     }
 }
 
 struct OnboardingView_StepSix: View {
     @Binding var pageSelected: [Int:[String]]
+    @State private var buttonStates: [String: Bool] = [:]
     var step = 6
     var body: some View {
         Text("Step six")
