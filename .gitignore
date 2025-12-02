@@ -1,0 +1,67 @@
+# -----------------------------
+# 🔐 CUSTOM: PRIVATE SECRETS
+# -----------------------------
+Secrets.swift
+**/Secrets.swift
+
+# -----------------------------
+# 🧱 Xcode Build Products
+# -----------------------------
+build/
+DerivedData/
+DerivedData/*
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# -----------------------------
+# 📁 Xcode Personal Data
+# -----------------------------
+xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
+
+# -----------------------------
+# 📦 Swift Package Manager
+# -----------------------------
+.build/
+Packages/
+.swiftpm/
+# SPM resolution files
+Package.resolved
+
+# -----------------------------
+# 🍏 CocoaPods
+# -----------------------------
+Pods/
+Podfile.lock
+# If you're committing Pods, remove the pattern above
+
+# -----------------------------
+# 🧵 Carthage
+# -----------------------------
+Carthage/Build/
+
+# -----------------------------
+# 🎨 SwiftUI Previews
+# -----------------------------
+*.preview.thumbnails
+*.preview-thumbnails
+
+# -----------------------------
+# 🖼️ Asset Catalog backup
+# -----------------------------
+*.xcassets/*.DS_Store
+
+# -----------------------------
+# 🔧 Misc system files
+# -----------------------------
+*.DS_Store
+*.swp
+*.lock
+*.tmp
+
+# -----------------------------
+# 🧪 Xcode Test Artifacts
+# -----------------------------
+*.xcresult

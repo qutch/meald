@@ -345,6 +345,7 @@ struct OnboardingView_StepThree: View {
     @StateObject private var searchVM = LocationSearchViewModel(type:"location")
     @Binding var pageSelected: [Int:[String]]
     @Binding var location: String
+    @Binding var distance: Double
     @State private var curSearchTask: Task<Void, Never>?
     @State private var buttonStates: [String: Bool] = [:]
     @FocusState private var locationFieldIsFocused: Bool
@@ -393,61 +394,22 @@ struct OnboardingView_StepThree: View {
             Spacer().frame(height:50)
             Text("How far will you go?").font(.headline)
             VStack {
+                
                 HStack {
-                    Spacer()
-                    ButtonChoice(
-                        buttonText: "5-10 min",
-                        step: step,
-                        isClicked: Binding(
-                            get: { buttonStates["5-10 min"] ?? false },
-                            set: { buttonStates["5-10 min"] = $0
-                        }),
-                        pageSelected: $pageSelected
+                    Text("0")
+                    
+                    Slider(
+                        value: $distance,
+                        in: 0...20,
+                        step: 0.5
                     )
-                    Spacer()
-                    ButtonChoice(
-                        buttonText: "10-20 min",
-                        step: step,
-                        isClicked: Binding(
-                            get: { buttonStates["10-20 min"] ?? false },
-                            set: { buttonStates["10-20 min"] = $0
-                        }),
-                        pageSelected: $pageSelected
-                    )
-                    Spacer()
+                    .frame(width: 250)
+                    .padding()
+
+                    Text("20")
                 }
-                HStack {
-                    Spacer()
-                    ButtonChoice(
-                        buttonText: "20-30 min",
-                        step: step,
-                        isClicked: Binding(
-                            get: { buttonStates["20-30 min"] ?? false },
-                            set: { buttonStates["20-30 min"] = $0
-                        }),
-                        pageSelected: $pageSelected
-                    )
-                    Spacer()
-                    ButtonChoice(
-                        buttonText: "30-45 min",
-                        step: step,
-                        isClicked: Binding(
-                            get: { buttonStates["30-45 min"] ?? false },
-                            set: { buttonStates["30-45 min"] = $0
-                        }),
-                        pageSelected: $pageSelected
-                    )
-                    Spacer()
-                }
-                ButtonChoice(
-                    buttonText: "45+ min",
-                    step: step,
-                    isClicked: Binding(
-                        get: { buttonStates["45+ min"] ?? false },
-                        set: { buttonStates["45+ min"] = $0
-                    }),
-                    pageSelected: $pageSelected
-                )
+                Text("\(Int(distance)) miles")
+                
                 
             }
             Spacer()
@@ -627,6 +589,7 @@ struct OnboardingView_StepFive: View {
     @State private var buttonStates: [String: Bool] = [:]
     @FocusState private var locationFieldIsFocused: Bool
     @State var curTyped: String = ""
+    @Binding var favoriteSpots: [String?]
     
     var step = 5
     var body: some View {
@@ -644,7 +607,14 @@ struct OnboardingView_StepFive: View {
             ).onChange(of:curTyped) {
                 searchVM.update(query: curTyped)
             }.onSubmit() {
-                print("hi")
+                curTyped = searchVM.res[0]
+                // Autocomplete and add to favoriteSpots list
+                if !favoriteSpots.contains(curTyped) {
+                    favoriteSpots.append(curTyped)
+                }
+                
+                // Clear the search bar
+                curTyped = ""
             }
             .frame(width: 120, height:40)
             .padding(.horizontal, 15)
@@ -659,9 +629,17 @@ struct OnboardingView_StepFive: View {
                 ScrollView {
                     VStack(alignment: .leading) {
                         ForEach(searchVM.res, id: \.self) { item in
-                            Button(item) {
-                                curTyped = item
-                            }
+                            Button(
+                                action: {
+                                    curTyped = item
+                                    if !favoriteSpots.contains(curTyped) {
+                                        favoriteSpots.append(curTyped)
+                                    }
+                                    // Clear the search bar
+                                    curTyped = ""
+                                },
+                                label: { Text(item) }
+                            )
                             .frame(height: 40)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .foregroundStyle(.black)
@@ -670,16 +648,35 @@ struct OnboardingView_StepFive: View {
                     }
                 }.frame(maxHeight: 200)
             }
+            
+            // Hold favorite restaurants
+            VStack {
+                ForEach(favoriteSpots, id: \.self) { item in
+                    HStack {
+                        Text(item!)
+                            .foregroundStyle(.black)
+                        Spacer()
+                        Button(
+                            action: {
+                                let idx: Int = favoriteSpots.firstIndex(of: item) ?? -1
+                                if idx != -1 {
+                                    favoriteSpots.remove(at: idx)
+                                } else {
+                                    print("Index not valid or item does not exist")
+                                }
+                            },
+                            label: {
+                                Image(systemName: "x.circle")
+                                .foregroundStyle(.red)
+                            }
+                        ) // End of button
+                    }
+                    .padding(.horizontal, 40)
+                    .padding(.vertical, 10)
+                }
+            }
+            
         }
-    }
-}
-
-struct OnboardingView_StepSix: View {
-    @Binding var pageSelected: [Int:[String]]
-    @State private var buttonStates: [String: Bool] = [:]
-    var step = 6
-    var body: some View {
-        Text("Step six")
     }
 }
 
@@ -733,11 +730,14 @@ struct ButtonChoice: View {
 
 
 struct MainOnboardingView: View {
+    @Binding var currentView: PreViewState
     @State private var curStep: Int = 1
     @State private var pageChoices: [Int : [String]] = [:]
     @State private var onboardingFinished: Bool = false
     @State private var location: String = ""
+    @State private var distance: Double = 5.0
     @State private var navigationBack: Bool = false
+    @State private var favoritePlaces: [String?] = []
     
     
     
@@ -767,7 +767,7 @@ struct MainOnboardingView: View {
                     .padding(.horizontal, 30)
                     
                     Spacer()
-                    ProgressBar(totalSteps: 6, currentStep: curStep)
+                    ProgressBar(totalSteps: 5, currentStep: curStep)
                     Spacer()
 
                     Spacer()
@@ -780,17 +780,17 @@ struct MainOnboardingView: View {
                 TabView(selection: $curStep) {
                     OnboardingView_StepOne(pageSelected: $pageChoices).tag(1)
                     OnboardingView_StepTwo(pageSelected: $pageChoices).tag(2)
-                    OnboardingView_StepThree(pageSelected: $pageChoices, location: $location).tag(3)
+                    OnboardingView_StepThree(pageSelected: $pageChoices, location: $location, distance: $distance).tag(3)
                     OnboardingView_StepFour(pageSelected: $pageChoices).tag(4)
-                    OnboardingView_StepFive(pageSelected: $pageChoices).tag(5)
-                    OnboardingView_StepSix(pageSelected: $pageChoices).tag(6)
-                }.tabViewStyle(.page(indexDisplayMode: .never)).highPriorityGesture(DragGesture())
+                    OnboardingView_StepFive(pageSelected: $pageChoices, favoriteSpots: $favoritePlaces).tag(5)
+                }.tabViewStyle(.page(indexDisplayMode: .never)).gesture(DragGesture())
                 
                 // Continue Button
                 Button(
-                    action:{
-                        if (curStep == 6) {
+                    action: {
+                        if (curStep == 5) {
                             onboardingFinished = true
+                            currentView = .login
                         } else {
                             withAnimation(.easeInOut(duration: 0.5)) {
                                 curStep += 1
@@ -809,6 +809,6 @@ struct MainOnboardingView: View {
     }
 }
 
-#Preview {
-    MainOnboardingView()
-}
+//#Preview {
+//    MainOnboardingView()
+//}

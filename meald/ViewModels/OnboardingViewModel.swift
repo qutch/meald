@@ -30,11 +30,16 @@ class LocationSearchViewModel: NSObject, ObservableObject, MKLocalSearchComplete
         completer.queryFragment = query
     }
     
+    func clearRes() {
+        res.removeAll()
+    }
+    
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
         // Only keep localities / cities
         if type == "poi" {
             res = completer.results
                 .map { "\($0.title)" }
+            res = Array(Set(res))
         } else {
             res = completer.results
                 .filter { $0.subtitle.contains("City") || $0.subtitle.contains("County") || $0.subtitle != "" }
